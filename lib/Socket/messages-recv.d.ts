@@ -15,7 +15,8 @@ export declare const makeMessagesRecvSocket: (config: SocketConfig) => {
     }>;
     fetchMessageHistory: (count: number, oldestMsgKey: WAMessageKey, oldestMsgTimestamp: number | Long) => Promise<string>;
     requestPlaceholderResend: (messageKey: WAMessageKey) => Promise<string | undefined>;
-    getPrivacyTokens: (jids: string[]) => Promise<any>;
+    getPrivacyTokens: (jids: string[], timestamp?: number) => Promise<any>;
+    issuePrivacyTokens: (jids: string[], timestamp?: number) => Promise<any>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
     relayMessage: (jid: string, message: proto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, useCachedGroupMetadata, statusJidList }: MessageRelayOptions) => Promise<import("../Types").WAProto.WebMessageInfo>;
     messageRetryManager: MessageRetryManager;

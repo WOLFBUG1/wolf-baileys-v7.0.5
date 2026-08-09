@@ -24,7 +24,8 @@ export declare const makeBusinessSocket: (config: SocketConfig) => {
         isVideo: boolean;
     }>;
     rejectCall: (callId: string, callFrom: string) => Promise<void>;
-    getPrivacyTokens: (jids: string[]) => Promise<BinaryNode>;
+    getPrivacyTokens: (jids: string[], timestamp?: number) => Promise<BinaryNode>;
+    issuePrivacyTokens: (jids: string[], timestamp?: number) => Promise<BinaryNode>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
     relayMessage: (jid: string, message: import("../Types").WAProto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: import("../Types").MessageRelayOptions) => Promise<import("../Types").WAProto.WebMessageInfo>;
     messageRetryManager: import("../Utils").MessageRetryManager;

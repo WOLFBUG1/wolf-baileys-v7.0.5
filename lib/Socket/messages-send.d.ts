@@ -5,7 +5,8 @@ import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptio
 import { MessageRetryManager } from '../Utils';
 import { BinaryNode, JidWithDevice } from '../WABinary';
 export declare const makeMessagesSocket: (config: SocketConfig) => {
-    getPrivacyTokens: (jids: string[]) => Promise<BinaryNode>;
+    getPrivacyTokens: (jids: string[], timestamp?: number) => Promise<BinaryNode>;
+    issuePrivacyTokens: (jids: string[], timestamp?: number) => Promise<BinaryNode>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
     relayMessage: (jid: string, message: proto.IMessage, { messageId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, useCachedGroupMetadata, statusJidList }: MessageRelayOptions) => Promise<proto.WebMessageInfo>;
     messageRetryManager: MessageRetryManager;

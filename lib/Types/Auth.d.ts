@@ -76,6 +76,11 @@ export type SignalDataTypeMap = {
     };
     'app-state-sync-key': proto.Message.IAppStateSyncKeyData;
     'app-state-sync-version': LTHashState;
+    'tctoken': {
+        token: Buffer;
+        timestamp?: string | number;
+        senderTimestamp?: string | number;
+    };
 };
 export type SignalDataSet = {
     [T in keyof SignalDataTypeMap]?: {

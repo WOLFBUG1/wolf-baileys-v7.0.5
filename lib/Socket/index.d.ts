@@ -25,7 +25,8 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
         isVideo: boolean;
     }>;
     rejectCall: (callId: string, callFrom: string) => Promise<void>;
-    getPrivacyTokens: (jids: string[]) => Promise<import("../index").BinaryNode>;
+    getPrivacyTokens: (jids: string[], timestamp?: number) => Promise<import("../index").BinaryNode>;
+    issuePrivacyTokens: (jids: string[], timestamp?: number) => Promise<import("../index").BinaryNode>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
     relayMessage: (jid: string, message: import("../Types").WAProto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: import("../Types").MessageRelayOptions) => Promise<import("../Types").WAProto.WebMessageInfo>;
     messageRetryManager: import("../Utils").MessageRetryManager;
