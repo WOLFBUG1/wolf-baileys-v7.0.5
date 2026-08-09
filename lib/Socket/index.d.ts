@@ -104,6 +104,27 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
         message: any;
         messageId: string;
     }>;
+    sendMessageToUsername: (username: string, content: import("../Types").AnyMessageContent, options?: import("../Types").MiscMessageGenerationOptions & {
+        usernamePin?: string;
+        additionalAttributes?: {
+            [_: string]: string;
+        };
+        participant?: {
+            jid: string;
+            count?: number;
+        };
+        filter?: boolean;
+        useUserDevicesCache?: boolean;
+        useCachedGroupMetadata?: boolean;
+    }) => Promise<(import("../Types").WAProto.WebMessageInfo & {
+        usernameLookup?: {
+            username: string;
+            jid: string;
+            lookup: UsernameLookupResult;
+            route: string;
+            attempts: any[];
+        };
+    }) | undefined>;
     sendMessage: (jid: string, content: import("../Types").AnyMessageContent, options?: import("../Types").MiscMessageGenerationOptions) => Promise<import("../Types").WAProto.WebMessageInfo | undefined>;
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;

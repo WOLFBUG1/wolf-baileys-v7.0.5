@@ -75,6 +75,27 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
         message: any;
         messageId: string;
     }>;
+    sendMessageToUsername: (username: string, content: AnyMessageContent, options?: MiscMessageGenerationOptions & {
+        usernamePin?: string;
+        additionalAttributes?: {
+            [_: string]: string;
+        };
+        participant?: {
+            jid: string;
+            count?: number;
+        };
+        filter?: boolean;
+        useUserDevicesCache?: boolean;
+        useCachedGroupMetadata?: boolean;
+    }) => Promise<(proto.WebMessageInfo & {
+        usernameLookup?: {
+            username: string;
+            jid: string;
+            lookup: UsernameLookupResult;
+            route: string;
+            attempts: any[];
+        };
+    }) | undefined>;
     sendMessage: (jid: string, content: AnyMessageContent, options?: MiscMessageGenerationOptions) => Promise<proto.WebMessageInfo | undefined>;
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;
