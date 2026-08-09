@@ -9,6 +9,9 @@ export type ChatMutationMap = {
     [index: string]: ChatMutation;
 };
 export declare const newLTHashState: () => LTHashState;
+export declare const ensureLTHashStateVersion: (state: LTHashState) => LTHashState;
+export declare const isMissingKeyError: (error: any) => boolean;
+export declare const isAppStateSyncIrrecoverable: (error: any, attempts: number) => boolean;
 export declare const encodeSyncdPatch: ({ type, index, syncAction, apiVersion, operation }: WAPatchCreate, myAppStateKeyId: string, state: LTHashState, getAppStateSyncKey: FetchAppStateSyncKey) => Promise<{
     patch: proto.ISyncdPatch;
     state: LTHashState;
@@ -58,7 +61,7 @@ export declare const extractSyncdPatches: (result: BinaryNode, options: AxiosReq
 }>;
 export declare const downloadExternalBlob: (blob: proto.IExternalBlobReference, options: AxiosRequestConfig<any>) => Promise<Buffer>;
 export declare const downloadExternalPatch: (blob: proto.IExternalBlobReference, options: AxiosRequestConfig<any>) => Promise<proto.SyncdMutations>;
-export declare const decodeSyncdSnapshot: (name: WAPatchName, snapshot: proto.ISyncdSnapshot, getAppStateSyncKey: FetchAppStateSyncKey, minimumVersionNumber: number | undefined, validateMacs?: boolean) => Promise<{
+export declare const decodeSyncdSnapshot: (name: WAPatchName, snapshot: proto.ISyncdSnapshot, getAppStateSyncKey: FetchAppStateSyncKey, minimumVersionNumber: number | undefined, validateMacs?: boolean, logger?: Logger) => Promise<{
     state: LTHashState;
     mutationMap: ChatMutationMap;
 }>;

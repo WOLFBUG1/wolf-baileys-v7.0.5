@@ -8,6 +8,7 @@ import { proto } from '../../WAProto';
 import { AuthenticationState, SignalAuthState, TransactionCapabilityOptions } from './Auth';
 import { MediaConnInfo } from './Message';
 import { SignalRepository } from './Signal';
+import { MessageRetryManager } from '../Utils';
 export type WAVersion = [number, number, number];
 export type WABrowserDescription = [string, string, string];
 export type CacheStore = {
@@ -67,6 +68,8 @@ export type SocketConfig = {
      * map to store the retry counts for failed messages;
      * used to determine whether to retry a message or not */
     msgRetryCounterCache?: CacheStore;
+    /** modern retry/session helper used to cache recent outbound messages and inspect retry failures */
+    messageRetryManager?: MessageRetryManager;
     /** provide a cache to store a user's device list */
     userDevicesCache?: CacheStore;
     /** cache to store call offers */
@@ -105,7 +108,10 @@ export type SocketConfig = {
      * (solves the "this message can take a while" issue) can be retried
      * */
     getMessage: (key: proto.IMessageKey) => Promise<proto.IMessage | undefined>;
-    makeSignalRepository: (auth: SignalAuthState) => SignalRepository;
+    makeSignalRepository: (auth: SignalAuthState, logger?: any, pnToLIDFunc?: (pns: string[]) => Promise<Array<{
+        lid: string;
+        pn: string;
+    }>>) => SignalRepository;
     /** Socket passthrough */
     socket?: any;
 };

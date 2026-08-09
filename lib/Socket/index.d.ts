@@ -20,13 +20,15 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
     sendMessageAck: ({ tag, attrs, content }: import("../index").BinaryNode) => Promise<void>;
     sendRetryRequest: (node: import("../index").BinaryNode, forceIncludeKeys?: boolean) => Promise<void>;
     offerCall: (toJid: string, isVideo?: boolean) => Promise<{
-        id: string;
-        to: string;
+        callId: string;
+        toJid: string;
+        isVideo: boolean;
     }>;
     rejectCall: (callId: string, callFrom: string) => Promise<void>;
     getPrivacyTokens: (jids: string[]) => Promise<import("../index").BinaryNode>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
-    relayMessage: (jid: string, message: import("../Types").WAProto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: import("../Types").MessageRelayOptions) => Promise<string>;
+    relayMessage: (jid: string, message: import("../Types").WAProto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, statusJidList }: import("../Types").MessageRelayOptions) => Promise<import("../Types").WAProto.WebMessageInfo>;
+    messageRetryManager: import("../Utils").MessageRetryManager;
     sendReceipt: (jid: string, participant: string | undefined, messageIds: string[], type: import("../Types").MessageReceiptType) => Promise<void>;
     sendReceipts: (keys: import("../Types").WAProto.IMessageKey[], type: import("../Types").MessageReceiptType) => Promise<void>;
     getButtonArgs: (message: import("../Types").WAProto.IMessage) => {
@@ -46,6 +48,39 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
         [_: string]: string;
     }>;
     updateMediaMessage: (message: import("../Types").WAProto.IWebMessageInfo) => Promise<import("../Types").WAProto.IWebMessageInfo>;
+    sendTable: (jid: string, title: string, headers: string[], rows: any[][], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendList: (jid: string, title: string, items: any[], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendCodeBlock: (jid: string, code: string, quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatex: (jid: string, quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatexImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatexInlineImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    captureUnifiedResponse: (msg: any) => any;
+    sendUnifiedResponse: (jid: string, quoted: any, captured: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendRichMessage: (jid: string, submessages: any[], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
     sendMessage: (jid: string, content: import("../Types").AnyMessageContent, options?: import("../Types").MiscMessageGenerationOptions) => Promise<import("../Types").WAProto.WebMessageInfo | undefined>;
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;
@@ -108,8 +143,8 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
     profilePictureUrl: (jid: string, type?: "image" | "preview", timeoutMs?: number | undefined) => Promise<string | undefined>;
     onWhatsApp: (...jids: string[]) => Promise<{
         jid: string;
-        exists: unknown;
-        lid: unknown;
+        exists: boolean;
+        lid?: string;
     }[] | undefined>;
     fetchBlocklist: () => Promise<string[]>;
     fetchStatus: (jid: string) => Promise<{

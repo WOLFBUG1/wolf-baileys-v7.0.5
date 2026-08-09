@@ -69,8 +69,8 @@ export declare const makeNewsletterSocket: (config: SocketConfig) => {
     profilePictureUrl: (jid: string, type?: "image" | "preview", timeoutMs?: number | undefined) => Promise<string | undefined>;
     onWhatsApp: (...jids: string[]) => Promise<{
         jid: string;
-        exists: unknown;
-        lid: unknown;
+        exists: boolean;
+        lid?: string;
     }[] | undefined>;
     fetchBlocklist: () => Promise<string[]>;
     fetchStatus: (jid: string) => Promise<{

@@ -192,8 +192,12 @@ export type MessageRelayOptions = MinimalRelayOptions & {
     additionalNodes?: BinaryNode[];
     /** should we use the devices cache, or fetch afresh from the server; default assumed to be "true" */
     useUserDevicesCache?: boolean;
+    /** should cached group metadata be used where supported */
+    useCachedGroupMetadata?: boolean;
     /** jid list of participants for status@broadcast */
     statusJidList?: string[];
+    /** include bot metadata nodes on private sends; default true */
+    AI?: boolean;
 };
 export type MiscMessageGenerationOptions = MinimalRelayOptions & {
     /** optional, if you want to manually set the timestamp of the message */

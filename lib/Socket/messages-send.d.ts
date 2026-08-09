@@ -2,11 +2,13 @@
 import { Boom } from '@hapi/boom';
 import { proto } from '../../WAProto';
 import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SocketConfig, WAMessageKey } from '../Types';
+import { MessageRetryManager } from '../Utils';
 import { BinaryNode, JidWithDevice } from '../WABinary';
 export declare const makeMessagesSocket: (config: SocketConfig) => {
     getPrivacyTokens: (jids: string[]) => Promise<BinaryNode>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
     relayMessage: (jid: string, message: proto.IMessage, { messageId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, cachedGroupMetadata, useCachedGroupMetadata, statusJidList }: MessageRelayOptions) => Promise<proto.WebMessageInfo>;
+    messageRetryManager: MessageRetryManager;
     sendReceipt: (jid: string, participant: string | undefined, messageIds: string[], type: MessageReceiptType) => Promise<void>;
     sendReceipts: (keys: WAMessageKey[], type: MessageReceiptType) => Promise<void>;
     readMessages: (keys: WAMessageKey[]) => Promise<void>;
@@ -23,6 +25,39 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
     sendPeerDataOperationMessage: (pdoMessage: proto.Message.IPeerDataOperationRequestMessage) => Promise<string>;
     rahmi: any;
     updateMediaMessage: (message: proto.IWebMessageInfo) => Promise<proto.IWebMessageInfo>;
+    sendTable: (jid: string, title: string, headers: string[], rows: any[][], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendList: (jid: string, title: string, items: any[], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendCodeBlock: (jid: string, code: string, quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatex: (jid: string, quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatexImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatexInlineImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    captureUnifiedResponse: (msg: any) => any;
+    sendUnifiedResponse: (jid: string, quoted: any, captured: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendRichMessage: (jid: string, submessages: any[], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
     sendMessage: (jid: string, content: AnyMessageContent, options?: MiscMessageGenerationOptions) => Promise<proto.WebMessageInfo | undefined>;
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;
@@ -85,8 +120,8 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
     profilePictureUrl: (jid: string, type?: "image" | "preview", timeoutMs?: number | undefined) => Promise<string | undefined>;
     onWhatsApp: (...jids: string[]) => Promise<{
         jid: string;
-        exists: unknown;
-        lid: unknown;
+        exists: boolean;
+        lid?: string;
     }[] | undefined>;
     fetchBlocklist: () => Promise<string[]>;
     fetchStatus: (jid: string) => Promise<{

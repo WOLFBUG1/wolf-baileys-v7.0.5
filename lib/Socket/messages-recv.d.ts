@@ -2,6 +2,7 @@ import Long = require('long');
 import { Boom } from '@hapi/boom';
 import { proto } from '../../WAProto';
 import { MessageReceiptType, MessageRelayOptions, SocketConfig, WAMessageKey } from '../Types';
+import { MessageRetryManager } from '../Utils';
 import { BinaryNode } from '../WABinary';
 export declare const makeMessagesRecvSocket: (config: SocketConfig) => {
     sendMessageAck: ({ tag, attrs, content }: BinaryNode, errorCode?: number) => Promise<void>;
@@ -16,7 +17,8 @@ export declare const makeMessagesRecvSocket: (config: SocketConfig) => {
     requestPlaceholderResend: (messageKey: WAMessageKey) => Promise<string | undefined>;
     getPrivacyTokens: (jids: string[]) => Promise<any>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
-    relayMessage: (jid: string, message: proto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, useCachedGroupMetadata, statusJidList }: MessageRelayOptions) => Promise<string>;
+    relayMessage: (jid: string, message: proto.IMessage, { messageId: msgId, participant, additionalAttributes, additionalNodes, useUserDevicesCache, useCachedGroupMetadata, statusJidList }: MessageRelayOptions) => Promise<import("../Types").WAProto.WebMessageInfo>;
+    messageRetryManager: MessageRetryManager;
     sendReceipt: (jid: string, participant: string | undefined, messageIds: string[], type: MessageReceiptType) => Promise<void>;
     sendReceipts: (keys: WAMessageKey[], type: MessageReceiptType) => Promise<void>;
     readMessages: (keys: WAMessageKey[]) => Promise<void>;
@@ -32,6 +34,39 @@ export declare const makeMessagesRecvSocket: (config: SocketConfig) => {
     }>;
     sendPeerDataOperationMessage: (pdoMessage: proto.Message.IPeerDataOperationRequestMessage) => Promise<string>;
     updateMediaMessage: (message: proto.IWebMessageInfo) => Promise<proto.IWebMessageInfo>;
+    sendTable: (jid: string, title: string, headers: string[], rows: any[][], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendList: (jid: string, title: string, items: any[], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendCodeBlock: (jid: string, code: string, quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatex: (jid: string, quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatexImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendLatexInlineImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    captureUnifiedResponse: (msg: any) => any;
+    sendUnifiedResponse: (jid: string, quoted: any, captured: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
+    sendRichMessage: (jid: string, submessages: any[], quoted?: any, options?: any) => Promise<{
+        message: any;
+        messageId: string;
+    }>;
     sendMessage: (jid: string, content: import("../Types").AnyMessageContent, options?: import("../Types").MiscMessageGenerationOptions) => Promise<proto.WebMessageInfo>;
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;
@@ -96,8 +131,8 @@ export declare const makeMessagesRecvSocket: (config: SocketConfig) => {
     profilePictureUrl: (jid: string, type?: "preview" | "image", timeoutMs?: number) => Promise<string | undefined>;
     onWhatsApp: (...jids: string[]) => Promise<{
         jid: string;
-        exists: unknown;
-        lid: unknown;
+        exists: boolean;
+        lid?: string;
     }[] | undefined>;
     fetchBlocklist: () => Promise<string[]>;
     fetchDisappearingDuration: (...jids: string[]) => Promise<import("..").USyncQueryResultList[] | undefined>;

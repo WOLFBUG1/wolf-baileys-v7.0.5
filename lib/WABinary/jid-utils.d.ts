@@ -3,10 +3,19 @@ export declare const OFFICIAL_BIZ_JID = "16505361212@c.us";
 export declare const SERVER_JID = "server@c.us";
 export declare const PSA_WID = "0@c.us";
 export declare const STORIES_JID = "status@broadcast";
-export type JidServer = 'c.us' | 'g.us' | 'broadcast' | 's.whatsapp.net' | 'call' | 'lid' | 'newsletter';
+export declare const WAJIDDomains: {
+    readonly WHATSAPP: 0;
+    readonly LID: 1;
+    readonly HOSTED: 2;
+    readonly HOSTED_LID: 3;
+};
+export type JidServer = 'c.us' | 'g.us' | 'broadcast' | 's.whatsapp.net' | 'call' | 'lid' | 'hosted' | 'hosted.lid' | 'newsletter';
+export declare const getServerFromDomainType: (initialServer: string, domainType?: number) => string;
 export type JidWithDevice = {
     user: string;
     device?: number;
+    server?: JidServer | string;
+    domainType?: number;
 };
 export type FullJid = JidWithDevice & {
     server: JidServer | string;
@@ -20,6 +29,9 @@ export declare const areJidsSameUser: (jid1: string | undefined, jid2: string | 
 export declare const isJidUser: (jid: string | undefined) => boolean | undefined;
 /** is the jid a group */
 export declare const isLidUser: (jid: string | undefined) => boolean | undefined;
+export declare const isPnUser: (jid: string | undefined) => boolean | undefined;
+export declare const isHostedPnUser: (jid: string | undefined) => boolean | undefined;
+export declare const isHostedLidUser: (jid: string | undefined) => boolean | undefined;
 /** is the jid a broadcast */
 export declare const isJidBroadcast: (jid: string | undefined) => boolean | undefined;
 /** is the jid a group */
@@ -29,3 +41,4 @@ export declare const isJidStatusBroadcast: (jid: string) => boolean;
 /** is the jid the newsletter */
 export declare const isJidNewsLetter: (jid: string | undefined) => boolean | undefined;
 export declare const jidNormalizedUser: (jid: string | undefined) => string;
+export declare const transferDevice: (from: string, to: string) => string;
