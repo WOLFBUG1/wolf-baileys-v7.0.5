@@ -1,5 +1,11 @@
 /// <reference types="node" />
 import { UserFacingSocketConfig } from '../Types';
+export type AutoRestartSocketOptions = {
+    maxRetries?: number;
+    restartDelayMs?: number;
+    initialDelayMs?: number;
+    maxDelayMs?: number;
+};
 declare const makeWASocket: (config: UserFacingSocketConfig) => {
     register: (code: string) => Promise<import("./registration").ExistsResponse>;
     requestRegistrationCode: (registrationOptions?: import("./registration").RegistrationOptions | undefined) => Promise<import("./registration").ExistsResponse>;
@@ -206,4 +212,6 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
     waitForConnectionUpdate: (check: (u: Partial<import("../Types").ConnectionState>) => boolean | undefined, timeoutMs?: number | undefined) => Promise<void>;
     sendWAMBuffer: (wamBuffer: Buffer) => Promise<import("../index").BinaryNode>;
 };
+export declare const makeAutoRestartingWASocket: (config: UserFacingSocketConfig, options?: AutoRestartSocketOptions) => any;
+export { makeWASocket };
 export default makeWASocket;

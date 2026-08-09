@@ -1,4 +1,4 @@
-import makeWASocket from './Socket';
+import makeWASocket, { makeAutoRestartingWASocket } from './Socket';
 export * from '../WAProto';
 export * from './Utils';
 export * from './Types';
@@ -8,5 +8,5 @@ export * from './WABinary';
 export * from './WAM';
 export * from './WAUSync';
 export type WASocket = ReturnType<typeof makeWASocket>;
-export { makeWASocket };
+export { makeWASocket, makeAutoRestartingWASocket };
 export default makeWASocket;
