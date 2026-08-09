@@ -64,11 +64,11 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
         message: any;
         messageId: string;
     }>;
-    sendLatexImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+    sendLatexImage: (jid: string, quoted?: any, options?: any, renderLatexToPng?: Function, uploadFn?: Function) => Promise<{
         message: any;
         messageId: string;
     }>;
-    sendLatexInlineImage: (jid: string, quoted: any, options: any, renderLatexToPng: Function, uploadFn: Function) => Promise<{
+    sendLatexInlineImage: (jid: string, quoted?: any, options?: any, renderLatexToPng?: Function, uploadFn?: Function) => Promise<{
         message: any;
         messageId: string;
     }>;

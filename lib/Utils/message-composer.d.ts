@@ -40,11 +40,16 @@ export declare const generateLatexContent: (quoted: any, options?: any) => {
     message: any;
     messageId: string;
 };
-export declare const generateLatexImageContent: (quoted: any, options: any, uploadFn: Function, renderLatexToPng: Function) => Promise<{
+export declare const renderLatexToPng: (latexExpression: string, options?: any) => Promise<{
+    buffer: Buffer;
+    width: number;
+    height: number;
+}>;
+export declare const generateLatexImageContent: (quoted: any, options: any, uploadFn: Function, renderLatexToPng?: Function) => Promise<{
     message: any;
     messageId: string;
 }>;
-export declare const generateLatexInlineImageContent: (quoted: any, options: any, uploadFn: Function, renderLatexToPng: Function) => Promise<{
+export declare const generateLatexInlineImageContent: (quoted: any, options: any, uploadFn: Function, renderLatexToPng?: Function) => Promise<{
     message: any;
     messageId: string;
 }>;
