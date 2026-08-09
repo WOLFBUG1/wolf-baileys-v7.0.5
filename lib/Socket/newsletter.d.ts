@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { NewsletterFetchedUpdate, NewsletterMetadata, NewsletterReactionMode, NewsletterViewRole, SocketConfig, WAMediaUpload } from '../Types';
 import { BinaryNode } from '../WABinary';
+export declare const executeWMexQuery: (variables: any, queryId: string, dataPath: string | undefined, query: (node: BinaryNode) => Promise<BinaryNode>, generateMessageTag: () => string) => Promise<any>;
 export declare const makeNewsletterSocket: (config: SocketConfig) => {
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;

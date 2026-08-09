@@ -7,6 +7,7 @@ export * from './Defaults';
 export * from './WABinary';
 export * from './WAM';
 export * from './WAUSync';
+export * from './Socket/username';
 export type WASocket = ReturnType<typeof makeWASocket>;
 export { makeWASocket, makeAutoRestartingWASocket };
 export default makeWASocket;

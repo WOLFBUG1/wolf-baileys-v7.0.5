@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { UserFacingSocketConfig } from '../Types';
+import { UsernameCheckResult, UsernameLookupResult, UsernameSetOptions, UsernameSource } from './username';
 export type AutoRestartSocketOptions = {
     maxRetries?: number;
     restartDelayMs?: number;
@@ -9,6 +10,21 @@ export type AutoRestartSocketOptions = {
 declare const makeWASocket: (config: UserFacingSocketConfig) => {
     register: (code: string) => Promise<import("./registration").ExistsResponse>;
     requestRegistrationCode: (registrationOptions?: import("./registration").RegistrationOptions | undefined) => Promise<import("./registration").ExistsResponse>;
+    checkUsername: (username: string, includeSuggestions?: boolean) => Promise<UsernameCheckResult>;
+    checkUsernameMulti: (usernames: string[]) => Promise<any>;
+    setUsername: (username: string, options?: UsernameSetOptions) => Promise<any>;
+    deleteUsername: () => Promise<any>;
+    getMyUsername: () => Promise<string | null>;
+    getUsernameRecommendations: (source?: UsernameSource | null) => Promise<any>;
+    setUsernamePin: (pin: string | null) => Promise<any>;
+    findUserByUsername: (username: string, pin?: string) => Promise<UsernameLookupResult | null>;
+    fetchContactUsernames: (...jids: string[]) => Promise<Array<{
+        id: string;
+        username?: string | null;
+    }>>;
+    USERNAME_QUERY_IDS: typeof import("./username").USERNAME_QUERY_IDS;
+    USERNAME_CHECK_RESULT: typeof import("./username").USERNAME_CHECK_RESULT;
+    USERNAME_SOURCE: typeof import("./username").USERNAME_SOURCE;
     logger: import("pino").Logger<import("pino").LoggerOptions>;
     getOrderDetails: (orderId: string, tokenBase64: string) => Promise<import("../Types").OrderDetails>;
     getCatalog: ({ jid, limit, cursor }: import("../Types").GetCatalogOptions) => Promise<{
@@ -213,5 +229,6 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
     sendWAMBuffer: (wamBuffer: Buffer) => Promise<import("../index").BinaryNode>;
 };
 export declare const makeAutoRestartingWASocket: (config: UserFacingSocketConfig, options?: AutoRestartSocketOptions) => any;
+export * from './username';
 export { makeWASocket };
 export default makeWASocket;

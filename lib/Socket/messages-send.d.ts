@@ -4,7 +4,23 @@ import { proto } from '../../WAProto';
 import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SocketConfig, WAMessageKey } from '../Types';
 import { MessageRetryManager } from '../Utils';
 import { BinaryNode, JidWithDevice } from '../WABinary';
+import { UsernameCheckResult, UsernameLookupResult, UsernameSetOptions, UsernameSource } from './username';
 export declare const makeMessagesSocket: (config: SocketConfig) => {
+    checkUsername: (username: string, includeSuggestions?: boolean) => Promise<UsernameCheckResult>;
+    checkUsernameMulti: (usernames: string[]) => Promise<any>;
+    setUsername: (username: string, options?: UsernameSetOptions) => Promise<any>;
+    deleteUsername: () => Promise<any>;
+    getMyUsername: () => Promise<string | null>;
+    getUsernameRecommendations: (source?: UsernameSource | null) => Promise<any>;
+    setUsernamePin: (pin: string | null) => Promise<any>;
+    findUserByUsername: (username: string, pin?: string) => Promise<UsernameLookupResult | null>;
+    fetchContactUsernames: (...jids: string[]) => Promise<Array<{
+        id: string;
+        username?: string | null;
+    }>>;
+    USERNAME_QUERY_IDS: typeof import("./username").USERNAME_QUERY_IDS;
+    USERNAME_CHECK_RESULT: typeof import("./username").USERNAME_CHECK_RESULT;
+    USERNAME_SOURCE: typeof import("./username").USERNAME_SOURCE;
     getPrivacyTokens: (jids: string[], timestamp?: number) => Promise<BinaryNode>;
     issuePrivacyTokens: (jids: string[], timestamp?: number) => Promise<BinaryNode>;
     assertSessions: (jids: string[], force: boolean) => Promise<boolean>;
