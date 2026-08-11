@@ -31,7 +31,7 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
     readMessages: (keys: WAMessageKey[]) => Promise<void>;
     refreshMediaConn: (forceGet?: boolean) => Promise<MediaConnInfo>;
     getUSyncDevices: (jids: string[], useCache: boolean, ignoreZeroDevices: boolean) => Promise<JidWithDevice[]>;
-    createParticipantNodes: (jids: string[], message: proto.IMessage, extraAttrs?: BinaryNode['attrs']) => Promise<{
+    createParticipantNodes: (jids: string[], message: proto.IMessage, extraAttrs?: BinaryNode['attrs'], dsmMessage?: proto.IMessage) => Promise<{
         nodes: BinaryNode[];
         shouldIncludeDeviceIdentity: boolean;
     }>;
@@ -85,6 +85,9 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
             count?: number;
         };
         filter?: boolean;
+        forceLidUserDevices?: string[];
+        skipOwnDeviceFanout?: boolean;
+        refreshPrivacyToken?: boolean;
         useUserDevicesCache?: boolean;
         useCachedGroupMetadata?: boolean;
     }) => Promise<(proto.WebMessageInfo & {

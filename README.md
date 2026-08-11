@@ -21,3 +21,32 @@
 </div>
 
 <br>
+
+## Sending by phone number or username
+
+Both addressing modes can be used independently. Phone-number sending keeps the normal Baileys JID format, while username sending only needs the WhatsApp `@username` and does not require knowing the recipient's number.
+
+```js
+// Send by phone number
+await sock.sendMessage('201501037773@s.whatsapp.net', {
+  text: 'رسالة بالرقم'
+})
+
+// Send using only a WhatsApp username
+await sock.sendMessageToUsername('@Midoxsmb', {
+  text: 'رسالة بالـusername فقط'
+})
+
+// Rich helpers also accept @username directly
+await sock.sendTable('@Midoxsmb', 'WOLF Status', ['Status', 'Feature'], [
+  ['OK', 'sendRichMessage'],
+  ['OK', 'sendCodeBlock']
+])
+
+await sock.sendCodeBlock(
+  '@RTX.11',
+  'function wolf() { return true }',
+  undefined,
+  { language: 'javascript' }
+)
+```

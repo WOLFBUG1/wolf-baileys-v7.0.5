@@ -2,5 +2,6 @@ node_modules/
 _audit/
 npm-cache/
 *.log
+*.tgz
 .DS_Store
 Thumbs.db

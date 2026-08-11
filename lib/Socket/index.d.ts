@@ -62,7 +62,7 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
     getUSyncDevices: (jids: string[], useCache: boolean, ignoreZeroDevices: boolean) => Promise<import("../index").JidWithDevice[]>;
     createParticipantNodes: (jids: string[], message: import("../Types").WAProto.IMessage, extraAttrs?: {
         [key: string]: string;
-    } | undefined) => Promise<{
+    } | undefined, dsmMessage?: import("../Types").WAProto.IMessage) => Promise<{
         nodes: import("../index").BinaryNode[];
         shouldIncludeDeviceIdentity: boolean;
     }>;
@@ -114,6 +114,9 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
             count?: number;
         };
         filter?: boolean;
+        forceLidUserDevices?: string[];
+        skipOwnDeviceFanout?: boolean;
+        refreshPrivacyToken?: boolean;
         useUserDevicesCache?: boolean;
         useCachedGroupMetadata?: boolean;
     }) => Promise<(import("../Types").WAProto.WebMessageInfo & {

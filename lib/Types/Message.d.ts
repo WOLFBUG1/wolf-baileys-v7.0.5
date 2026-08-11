@@ -198,6 +198,10 @@ export type MessageRelayOptions = MinimalRelayOptions & {
     statusJidList?: string[];
     /** include bot metadata nodes on private sends; default true */
     AI?: boolean;
+    /** force selected private recipients to be addressed as LID users */
+    forceLidUserDevices?: string[];
+    /** skip sending private-chat fanout copies to the sender's other devices */
+    skipOwnDeviceFanout?: boolean;
 };
 export type MiscMessageGenerationOptions = MinimalRelayOptions & {
     /** optional, if you want to manually set the timestamp of the message */
@@ -205,6 +209,10 @@ export type MiscMessageGenerationOptions = MinimalRelayOptions & {
     /** the message you want to quote */
     quoted?: WAMessage;
     additionalNodes?: BinaryNode[];
+    /** force selected private recipients to be addressed as LID users */
+    forceLidUserDevices?: string[];
+    /** skip sending private-chat fanout copies to the sender's other devices */
+    skipOwnDeviceFanout?: boolean;
     /** disappearing messages settings */
     ephemeralExpiration?: number | string;
     /** timeout for media upload to WA server */
