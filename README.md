@@ -37,6 +37,32 @@ await sock.sendMessageToUsername('@Midoxsmb', {
   text: 'رسالة بالـusername فقط'
 })
 
+// sendMessage accepts either a JID or @username
+await sock.sendMessage('@Midoxsmb', {
+  text: 'Message sent with the unified API'
+})
+
+// Custom rich content is also available through sendMessage
+await sock.sendMessage('@Midoxsmb', {
+  table: {
+    title: 'WOLF Status',
+    headers: ['Status', 'Feature'],
+    rows: [['OK', 'Unified sendMessage']]
+  }
+})
+
+await sock.sendMessage('@RTX.11', {
+  codeBlock: {
+    code: 'function wolf() { return true }',
+    language: 'javascript'
+  }
+})
+
+// relayMessage also resolves @username before relaying prepared content
+await sock.relayMessage('@Midoxsmb', preparedMessage, {
+  messageId: 'CUSTOM_MESSAGE_ID'
+})
+
 // Rich helpers also accept @username directly
 await sock.sendTable('@Midoxsmb', 'WOLF Status', ['Status', 'Feature'], [
   ['OK', 'sendRichMessage'],

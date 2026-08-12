@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { Boom } from '@hapi/boom';
 import { proto } from '../../WAProto';
-import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SocketConfig, WAMessageKey } from '../Types';
+import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SendMessageResult, SocketConfig, WAMessageKey } from '../Types';
 import { MessageRetryManager } from '../Utils';
 import { BinaryNode, JidWithDevice } from '../WABinary';
 import { UsernameCheckResult, UsernameLookupResult, UsernameSetOptions, UsernameSource } from './username';
@@ -90,7 +90,7 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
         refreshPrivacyToken?: boolean;
         useUserDevicesCache?: boolean;
         useCachedGroupMetadata?: boolean;
-    }) => Promise<(proto.WebMessageInfo & {
+    }) => Promise<(SendMessageResult & {
         usernameLookup?: {
             username: string;
             jid: string;
@@ -99,7 +99,7 @@ export declare const makeMessagesSocket: (config: SocketConfig) => {
             attempts: any[];
         };
     }) | undefined>;
-    sendMessage: (jid: string, content: AnyMessageContent, options?: MiscMessageGenerationOptions) => Promise<proto.WebMessageInfo | undefined>;
+    sendMessage: (jid: string, content: AnyMessageContent, options?: MiscMessageGenerationOptions) => Promise<SendMessageResult | undefined>;
     subscribeNewsletterUpdates: (jid: string) => Promise<{
         duration: string;
     }>;

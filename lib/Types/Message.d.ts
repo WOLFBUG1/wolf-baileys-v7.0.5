@@ -163,7 +163,40 @@ export type AnyRegularMessageContent = (({
     body?: string;
     footer?: string;
 } | SharePhoneNumber | RequestPhoneNumber) & ViewOnce;
-export type AnyMessageContent = AnyRegularMessageContent | {
+export type TableMessageContent = {
+    table: {
+        title: string;
+        headers: string[];
+        rows: any[][];
+        headerText?: string;
+        footer?: string;
+    };
+};
+export type CodeBlockMessageContent = {
+    codeBlock: string | {
+        code: string;
+        language?: string;
+        title?: string;
+        footer?: string;
+    };
+};
+export type ComposedMessageResult = {
+    message: WAMessageContent;
+    messageId: string;
+    usernameLookup?: {
+        username: string;
+        jid: string;
+        lookup: {
+            jid?: string;
+            lid?: string;
+            contact: boolean;
+        };
+        route: string;
+        attempts?: any[];
+    };
+};
+export type SendMessageResult = WAMessage | ComposedMessageResult;
+export type AnyMessageContent = AnyRegularMessageContent | TableMessageContent | CodeBlockMessageContent | {
     forward: WAMessage;
     force?: boolean;
 } | {
@@ -180,6 +213,10 @@ type MinimalRelayOptions = {
     cachedGroupMetadata?: (jid: string) => Promise<GroupMetadataParticipants | undefined>;
 };
 export type MessageRelayOptions = MinimalRelayOptions & {
+    /** optional username PIN used while resolving an @username target */
+    usernamePin?: string;
+    /** refresh the recipient privacy token before relaying to an @username target */
+    refreshPrivacyToken?: boolean;
     /** only send to a specific participant; used when a message decryption fails for a single user */
     participant?: {
         jid: string;
