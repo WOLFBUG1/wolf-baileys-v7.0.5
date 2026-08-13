@@ -194,7 +194,8 @@ declare class xeonDugong {
     constructor(
         utils: xeonDugong.Utils,
         waUploadToServer: xeonDugong.WAMediaUploadFunction,
-        relayMessageFn?: (jid: string, content: any, options?: any) => Promise<any>
+        relayMessageFn?: (jid: string, content: any, options?: any) => Promise<any>,
+        resolveTargetFn?: (target: string) => Promise<string>
     );
     
     detectType(content: xeonDugong.MessageContent): 'PAYMENT' | 'PRODUCT' | 'INTERACTIVE' | 'ALBUM' | 'EVENT' | 'POLL_RESULT' | 'GROUP_STORY' | null;
@@ -247,6 +248,7 @@ declare class xeonDugong {
 
     utils: xeonDugong.Utils;
     relayMessage: (jid: string, content: any, options?: any) => Promise<any>;
+    resolveTarget: (target: string) => Promise<string>;
     waUploadToServer: xeonDugong.WAMediaUploadFunction;
     bail: xeonDugong.BailUtils;
 }

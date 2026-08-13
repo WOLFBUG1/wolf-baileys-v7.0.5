@@ -40,7 +40,6 @@ describe('username-only message routing', () => {
         expect(source).toContain('const relayMessageWithUsername')
         expect(source).toContain('return relayMessage(target, message, options)')
         expect(source).toContain('const resolved = await resolveComposedMessageTarget(target, options)')
-        expect(source).toContain('? { ...options.participant, jid: resolved.jid }')
         expect(source).toContain('return relayMessage(resolved.jid, message, {')
         expect(source).toContain('relayMessage: relayMessageWithUsername')
 
@@ -64,6 +63,44 @@ describe('username-only message routing', () => {
         expect(normalRoute).toBeGreaterThan(usernameRoute)
     })
 
+    test('normalizes raw phone recipients without changing existing JIDs', () => {
+        expect(source).toContain('const normalizeDirectRecipientTarget')
+        expect(source).toContain("return `${number}@s.whatsapp.net`")
+        expect(source).toContain('jid = normalizeDirectRecipientTarget(jid)')
+        expect(source).toContain('target = normalizeDirectRecipientTarget(target)')
+    })
+
+    test('resolves status viewers and participant recipients through the shared path', () => {
+        expect(source).toContain('const resolveMessageRecipientOptions')
+        expect(source).toContain('resolveComposedMessageTarget(participant.jid, options)')
+        expect(source).toContain('statusJidList.map(async (jid) =>')
+        expect(source).toContain('options = await resolveMessageRecipientOptions(options)')
+    })
+
+    test('strips invisible bidirectional formatting from copied usernames', () => {
+        expect(source).toMatch(/\\u2066-\\u2069/)
+    })
+
+    test('routes direct rahmi senders through the shared recipient resolver', () => {
+        const dugongSource = fs.readFileSync(
+            path.join(__dirname, '..', 'lib', 'Socket', 'dugong.js'),
+            'utf8'
+        )
+
+        expect(source).toContain('relayMessageWithUsername,')
+        expect(source).toContain('async target => (await resolveComposedMessageTarget(target)).jid')
+        expect(dugongSource).toContain('this.resolveTarget = typeof resolveTargetFn === "function"')
+
+        for (const helper of [
+            'handleAlbum',
+            'handleEvent',
+            'handlePollResult',
+            'handleGroupStory'
+        ]) {
+            expect(dugongSource).toMatch(new RegExp(`${helper}\\(content, jid, quoted\\)[\\s\\S]*?jid = await this\\.resolveTarget\\(jid\\)`))
+        }
+    })
+
     test('sendMessage routes table and codeBlock content through their composers', () => {
         const sendMessageStart = source.indexOf('sendMessage: async (jid, content, options = {})')
         const sendMessageBlock = source.slice(sendMessageStart)
@@ -72,5 +109,18 @@ describe('username-only message routing', () => {
         expect(sendMessageBlock).toContain('return messagesSocket.sendTable(')
         expect(sendMessageBlock).toContain("'codeBlock' in content")
         expect(sendMessageBlock).toContain('return messagesSocket.sendCodeBlock(')
+    })
+
+    test('resolves the recipient before regular and custom message type dispatch', () => {
+        const sendMessageStart = source.indexOf('sendMessage: async (jid, content, options = {})')
+        const normalizeTarget = source.indexOf('jid = normalizeDirectRecipientTarget(jid)', sendMessageStart)
+        const usernameRoute = source.indexOf('return messagesSocket.sendMessageToUsername(jid, content, options)', sendMessageStart)
+        const customTypeDispatch = source.indexOf('const messageType = rahmi.detectType(content)', sendMessageStart)
+        const regularMessageBuilder = source.indexOf('Utils_1.generateWAMessage(jid, content', sendMessageStart)
+
+        expect(normalizeTarget).toBeGreaterThan(sendMessageStart)
+        expect(usernameRoute).toBeGreaterThan(normalizeTarget)
+        expect(customTypeDispatch).toBeGreaterThan(usernameRoute)
+        expect(regularMessageBuilder).toBeGreaterThan(customTypeDispatch)
     })
 })
