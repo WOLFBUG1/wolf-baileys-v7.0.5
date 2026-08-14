@@ -51,6 +51,17 @@ describe('username-only message routing', () => {
         expect(usernameLookup).toBeGreaterThan(passthroughRoute)
     })
 
+    test('passes status broadcasts and their phone recipients through unchanged', () => {
+        const wrapperStart = source.indexOf('const relayMessageWithUsername')
+        const statusGuard = source.indexOf('target === WABinary_1.STORIES_JID', wrapperStart)
+        const directRelay = source.indexOf('return relayMessage(target, message, options)', statusGuard)
+        const optionResolution = source.indexOf('options = await resolveMessageRecipientOptions(options)', wrapperStart)
+
+        expect(statusGuard).toBeGreaterThan(wrapperStart)
+        expect(directRelay).toBeGreaterThan(statusGuard)
+        expect(optionResolution).toBeGreaterThan(directRelay)
+    })
+
     test('sendMessage accepts usernames without changing normal JID routing', () => {
         expect(source).toContain("typeof jid === 'string' && jid.trim().startsWith('@')")
         expect(source).toContain('return messagesSocket.sendMessageToUsername(jid, content, options)')
@@ -97,7 +108,7 @@ describe('username-only message routing', () => {
             'handlePollResult',
             'handleGroupStory'
         ]) {
-            expect(dugongSource).toMatch(new RegExp(`${helper}\\(content, jid, quoted\\)[\\s\\S]*?jid = await this\\.resolveTarget\\(jid\\)`))
+            expect(dugongSource).toMatch(new RegExp(`${helper}\\(content, jid, quoted(?:, relayOptions = \\{\\})?\\)[\\s\\S]*?jid = await this\\.resolveTarget\\(jid\\)`))
         }
     })
 
@@ -122,5 +133,31 @@ describe('username-only message routing', () => {
         expect(usernameRoute).toBeGreaterThan(normalizeTarget)
         expect(customTypeDispatch).toBeGreaterThan(usernameRoute)
         expect(regularMessageBuilder).toBeGreaterThan(customTypeDispatch)
+    })
+
+    test('preserves username routing options for every custom message type', () => {
+        const dugongSource = fs.readFileSync(
+            path.join(__dirname, '..', 'lib', 'Socket', 'dugong.js'),
+            'utf8'
+        )
+
+        for (const type of ['PAYMENT', 'PRODUCT', 'INTERACTIVE']) {
+            const caseStart = source.indexOf(`case '${type}':`)
+            const caseEnd = source.indexOf('case ', caseStart + 6)
+            const caseBlock = source.slice(caseStart, caseEnd)
+            expect(caseBlock).toContain('...options')
+        }
+
+        for (const helper of [
+            'handleAlbum',
+            'handleEvent',
+            'handlePollResult',
+            'handleGroupStory'
+        ]) {
+            expect(source).toContain(`rahmi.${helper}(content, jid, quoted, options)`)
+            expect(dugongSource).toMatch(new RegExp(
+                `async ${helper}\\(content, jid, quoted, relayOptions = \\{\\}\\)[\\s\\S]*?this\\.relayMessage\\(jid, [\\s\\S]*?\\{[\\s\\S]*?\\.\\.\\.relayOptions,[\\s\\S]*?messageId:`
+            ))
+        }
     })
 })

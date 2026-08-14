@@ -220,25 +220,29 @@ declare class xeonDugong {
     handleAlbum(
         content: { albumMessage: xeonDugong.AlbumItem[] },
         jid: string,
-        quoted?: proto.IWebMessageInfo
+        quoted?: proto.IWebMessageInfo,
+        relayOptions?: any
     ): Promise<any>;
 
     handleEvent(
         content: { eventMessage: xeonDugong.EventMessage },
         jid: string,
-        quoted?: proto.IWebMessageInfo
+        quoted?: proto.IWebMessageInfo,
+        relayOptions?: any
     ): Promise<any>;
     
     handlePollResult(
         content: { pollResultMessage: xeonDugong.PollResultMessage },
         jid: string,
-        quoted?: proto.IWebMessageInfo
+        quoted?: proto.IWebMessageInfo,
+        relayOptions?: any
     ): Promise<any>;
 
     handleGroupStory(
         content: { groupStatusMessage: xeonDugong.GroupStatusMessage },
         jid: string,
-        quoted?: proto.IWebMessageInfo
+        quoted?: proto.IWebMessageInfo,
+        relayOptions?: any
     ): Promise<any>;
 
     buildMessageContent(
