@@ -26,6 +26,14 @@ export type SocketConfig = {
     waWebSocketUrl: string | URL;
     /** Fails the connection if the socket times out in this interval */
     connectTimeoutMs: number;
+    /** start the transport during construction; set false to install handlers before connect */
+    connectImmediately?: boolean;
+    /** per-session operation scheduler or compatible implementation */
+    operationScheduler?: any;
+    operationSchedulerOptions?: Record<string, unknown>;
+    wsHighWaterMark?: number;
+    wsLowWaterMark?: number;
+    wsBackpressureTimeoutMs?: number;
     /** Default timeout for queries, undefined for no timeout */
     defaultQueryTimeoutMs: number | undefined;
     /** ping-pong interval for WS connection */

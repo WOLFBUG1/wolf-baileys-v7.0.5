@@ -9,5 +9,15 @@ import { AuthenticationState } from '../Types';
 export declare const useMultiFileAuthState: (folder: string) => Promise<{
     state: AuthenticationState;
     saveCreds: () => Promise<void>;
+    authStoreController: {
+        readonly generation: number;
+        readonly active: boolean;
+        readonly accepting: boolean;
+        beginRetirement(): void;
+        flush(): Promise<void>;
+        retireAndFlush(): Promise<void>;
+        dispose(): Promise<void>;
+        getPendingWriteCount(): number;
+    };
 }>;
  

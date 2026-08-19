@@ -224,6 +224,7 @@ declare const makeWASocket: (config: UserFacingSocketConfig) => {
     }[], star: boolean) => Promise<void>;
     type: "md";
     ws: any;
+    connect: () => Promise<boolean>;
     ev: import("../Types").BaileysEventEmitter & {
         process(handler: (events: Partial<import("../Types").BaileysEventMap>) => void | Promise<void>): () => void;
         buffer(): void;
