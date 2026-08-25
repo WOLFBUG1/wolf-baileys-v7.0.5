@@ -51,6 +51,19 @@ describe('username-only message routing', () => {
         expect(usernameLookup).toBeGreaterThan(passthroughRoute)
     })
 
+    test('rejects malformed relay recipients before destructuring the decoded JID', () => {
+        const relayStart = source.indexOf('const relayMessage = async (jid, message')
+        const decode = source.indexOf('const decodedJid = WABinary_1.jidDecode(jid)', relayStart)
+        const invalidGuard = source.indexOf("Invalid WhatsApp recipient JID: expected user@server", decode)
+        const destructure = source.indexOf('const { user, server } = decodedJid', decode)
+
+        expect(relayStart).toBeGreaterThan(-1)
+        expect(source.slice(relayStart, decode)).toContain('} = {}) =>')
+        expect(decode).toBeGreaterThan(relayStart)
+        expect(invalidGuard).toBeGreaterThan(decode)
+        expect(destructure).toBeGreaterThan(invalidGuard)
+    })
+
     test('passes status broadcasts and their phone recipients through unchanged', () => {
         const wrapperStart = source.indexOf('const relayMessageWithUsername')
         const statusGuard = source.indexOf('target === WABinary_1.STORIES_JID', wrapperStart)
